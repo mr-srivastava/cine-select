@@ -82,7 +82,7 @@ export default async function Movie({ params }: { params: { id: string } }) {
               </h2>
               <ul className="list-disc list-inside">
                 {movie?.production_companies.map((company) => (
-                  <li key={company.id}>{company.name}</li>
+                  <li key={company.id}>{company?.name}</li>
                 ))}
               </ul>
             </div>
@@ -92,7 +92,7 @@ export default async function Movie({ params }: { params: { id: string } }) {
               </h2>
               <ul className="list-disc list-inside">
                 {movie?.production_countries.map((country) => (
-                  <li key={country.iso_3166_1}>{country.name}</li>
+                  <li key={country.iso_3166_1}>{country?.name}</li>
                 ))}
               </ul>
             </div>
@@ -101,7 +101,7 @@ export default async function Movie({ params }: { params: { id: string } }) {
             <h2 className="text-xl font-semibold mb-2">Spoken Languages</h2>
             <ul className="list-disc list-inside">
               {movie?.spoken_languages.map((language) => (
-                <li key={language.iso_639_1}>{language.english_name}</li>
+                <li key={language.iso_639_1}>{language?.english_name}</li>
               ))}
             </ul>
           </div>
