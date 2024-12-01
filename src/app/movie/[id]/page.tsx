@@ -3,6 +3,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 export default async function Movie({ params }: { params: { id: string } }) {
@@ -23,7 +24,7 @@ export default async function Movie({ params }: { params: { id: string } }) {
         <div className="container mx-auto px-4 h-full flex items-end pb-8">
           <div className="relative z-10 flex items-end">
             {movie?.poster_path && (
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
                 alt={movie?.title}
                 width={200}
