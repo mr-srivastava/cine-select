@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,26 +8,30 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-export default function PageBreadcrumb(props: {
+export default function PageBreadcrumb({breadcrumbs}: {
   breadcrumbs: { link: string; label: string; isActive: boolean }[];
 }) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {props.breadcrumbs.map((breadcrumb) => {
+        {breadcrumbs.map((breadcrumb, index) => {
           return (
-            <BreadcrumbItem key={breadcrumb.link}>
-              {breadcrumb.isActive ? (
-                <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
-              ) : (
-                <>
-                <BreadcrumbLink href={breadcrumb.link}>
-                  {breadcrumb.label}
-                </BreadcrumbLink>
+            <Fragment key={breadcrumb.link}>
+              <BreadcrumbItem key={breadcrumb.link}>
+                {breadcrumb.isActive ? (
+                  <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
+                ) : (
+                  <>
+                    <BreadcrumbLink href={breadcrumb.link}>
+                      {breadcrumb.label}
+                    </BreadcrumbLink>
+                  </>
+                )}
+              </BreadcrumbItem>
+              {index < breadcrumbs.length - 1 && (
                 <BreadcrumbSeparator />
-                </>
               )}
-            </BreadcrumbItem>
+            </Fragment>
           );
         })}
       </BreadcrumbList>

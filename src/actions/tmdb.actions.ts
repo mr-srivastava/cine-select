@@ -34,7 +34,6 @@ export async function fetchMovieDetails(movieId: number): Promise<Movie> {
       `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`,
       { cache: "no-store" }
     );
-    console.log(response)
 
     if (!response.ok) {
       throw new Error(response.statusText || "Failed to fetch movie details");
