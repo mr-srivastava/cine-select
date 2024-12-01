@@ -1,30 +1,12 @@
-"use client";
 import { fetchMovieDetails } from "@/actions/tmdb.actions";
+import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { Badge } from "@/components/ui/badge";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import { Movie } from "@/types/tmdb";
 import { Star } from "lucide-react";
-import Image from "next/image";
-import React, { useEffect } from "react";
+import React from "react";
 
-export default function Movie({ params }: { params: { id: string } }) {
-  const [movie, setMovie] = React.useState<Movie | null>();
-  const getMovieDetails = async (movieId: number) => {
-    const movieDetails = await fetchMovieDetails(movieId);
-    setMovie(movieDetails);
-    return movieDetails;
-  };
-  useEffect(() => {
-    getMovieDetails(Number(params.id));
-  }, []);
+export default async function Movie({ params }: { params: { id: string } }) {
+  const movie = await fetchMovieDetails(Number(params.id));
 
   return (
     <div className="min-h-screen bg-gray-800">
@@ -51,9 +33,7 @@ export default function Movie({ params }: { params: { id: string } }) {
             )}
             <div className="text-white mb-4">
               <h1 className="text-4xl font-bold">{movie?.title}</h1>
-              <p className="text-xl">
-                {movie?.tagline || "No tagline available"}
-              </p>
+              {movie?.tagline && <p className="text-xl">{movie?.tagline}</p>}
             </div>
           </div>
         </div>
@@ -61,17 +41,16 @@ export default function Movie({ params }: { params: { id: string } }) {
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="mb-2">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{movie?.title}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <PageBreadcrumb
+              breadcrumbs={[
+                { link: "/", label: "Home", isActive: false },
+                {
+                  link: `/movie/${movie?.id}`,
+                  label: movie?.title,
+                  isActive: true,
+                },
+              ]}
+            />
           </div>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
@@ -143,4 +122,3 @@ export default function Movie({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
