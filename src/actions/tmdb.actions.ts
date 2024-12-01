@@ -27,3 +27,23 @@ export async function searchMovies(query: string): Promise<Movie[]> {
     return [];
   }
 }
+
+export async function fetchMovieDetails(movieId: number): Promise<Movie> {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`,
+      { cache: "no-store" }
+    );
+    console.log(response)
+
+    if (!response.ok) {
+      throw new Error(response.statusText || "Failed to fetch movie details");
+    }
+
+    const data: Movie = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching movie details:", error);
+    throw error;
+  }
+}
