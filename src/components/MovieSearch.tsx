@@ -62,7 +62,7 @@ export default function MovieSearch() {
                 {movies.map((movie) => (
                   <CommandItem
                     key={movie.id}
-                    value={movie.title} // Add this to improve filtering
+                    value={`${movie.title}-${movie.id}`} // Modified to include movie.id for uniqueness
                     className='flex items-center gap-4 px-4 py-2'
                   >
                     <div className='flex-shrink-0 w-8 h-12 bg-muted rounded overflow-hidden'>
