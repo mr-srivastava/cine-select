@@ -3,11 +3,17 @@ import MovieSection from "@/components/MovieSection";
 import { fetchMovieList } from "@/actions/tmdb.actions";
 
 export default async function Home() {
-  const [popular, nowPlaying, topRated] = await Promise.all([
+  const results = await Promise.allSettled([
     fetchMovieList("popular", 1),
     fetchMovieList("now_playing", 1),
     fetchMovieList("top_rated", 1),
   ]);
+
+  const [popular, nowPlaying, topRated] = results.map((result) => {
+    if (result.status === "fulfilled") return result.value;
+    console.error("Home fetchMovieList failed:", result.reason);
+    return [];
+  });
 
   return (
     <div className="cinema-grain min-h-screen bg-dark-bg">

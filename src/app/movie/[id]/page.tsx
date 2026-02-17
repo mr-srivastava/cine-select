@@ -113,9 +113,13 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
           <div className="mt-4">
             <h2 className="text-xl font-semibold mb-2">Spoken Languages</h2>
             <ul className="list-disc list-inside">
-              {movie.spoken_languages.map((language) => (
-                <li key={language.iso_639_1}>{language.english_name}</li>
-              ))}
+              {movie.spoken_languages
+                .filter((language) => language.english_name ?? language.name ?? language.iso_639_1)
+                .map((language) => (
+                  <li key={language.iso_639_1}>
+                    {language.english_name ?? language.name ?? language.iso_639_1}
+                  </li>
+                ))}
             </ul>
           </div>
           {movie.homepage && (

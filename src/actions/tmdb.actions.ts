@@ -41,7 +41,7 @@ export async function searchMovies(query: string): Promise<MovieSearchResult[]> 
 
   if (!API_KEY) {
     console.error("TMDB_API_KEY is not set in environment variables");
-    throw new Error("TMDB API key is not configured");
+    return [];
   }
 
   try {
@@ -55,14 +55,14 @@ export async function searchMovies(query: string): Promise<MovieSearchResult[]> 
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`TMDB API error: ${response.status} ${response.statusText}`, errorText);
-      throw new Error(`Failed to fetch movies: ${response.status} ${response.statusText}`);
+      return [];
     }
 
     const data: MovieSearchResponse = await response.json();
     return data.results;
   } catch (error) {
     console.error("Error searching movies:", error);
-    throw error;
+    return [];
   }
 }
 
