@@ -1,5 +1,11 @@
 export function formatReleaseDate(dateString: string): string {
   const date = new Date(dateString);
+  
+  // Validate the date
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+  
   const day = date.getDate();
   const month = date.toLocaleDateString("en-US", { month: "short" });
   const year = date.getFullYear();

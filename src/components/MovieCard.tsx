@@ -76,8 +76,12 @@ function MovieCardPoster({
   }
 
   // Fallback when no poster_path
+  const fallbackStyle = width && height ? { width, height } : undefined;
   return (
-    <div className={cn(containerClassName, "flex h-full w-full items-center justify-center text-4xl text-muted-foreground", fallbackClassName)}>
+    <div 
+      className={cn(containerClassName, "flex h-full w-full items-center justify-center text-4xl text-muted-foreground", fallbackClassName)}
+      style={fallbackStyle}
+    >
       🎬
     </div>
   );

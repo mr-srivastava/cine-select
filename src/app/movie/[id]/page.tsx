@@ -73,13 +73,13 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
               <Separator orientation="vertical" className="h-6 mx-2" />
               <MovieCard.ReleaseDate release_date={movie.release_date} />
               <Separator orientation="vertical" className="h-6 mx-2" />
-              <span className="text-muted-foreground">{movie.runtime ? formatRuntime(movie.runtime) : ""}</span>
+              <span className="text-muted-foreground text-xs">{movie.runtime ? formatRuntime(movie.runtime) : ""}</span>
             </div>
             <div className="flex gap-2 justify-end">
               {movie.genres.map((genre) => (
                 <Badge
                   key={genre.id}
-                  className="bg-secondary text-sm font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80"
+                  className="bg-secondary text-xs font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80"
                 >
                   {genre.name}
                 </Badge>
