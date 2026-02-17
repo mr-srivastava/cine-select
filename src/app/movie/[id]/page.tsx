@@ -11,8 +11,8 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
   const movie = await fetchMovieDetails(Number(id));
 
   return (
-    <div className="min-h-screen bg-dark-bg">
-      <div className="relative h-[50vh] bg-dark-surface">
+    <div className="cinema-grain min-h-screen bg-dark-bg">
+      <div className="cinema-vignette relative h-[50vh] min-h-[280px] bg-dark-surface">
         {movie.backdrop_path && (
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
@@ -21,27 +21,33 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
             }}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark-bg" />
-        <div className="container mx-auto px-4 h-full flex items-end pb-8">
-          <div className="relative z-10 flex items-end">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-dark-bg" />
+        <div className="container relative z-10 mx-auto flex h-full items-end px-4 pb-8">
+          <div className="flex items-end gap-6">
             {movie.poster_path && (
               <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
                 width={200}
                 height={300}
-                className="rounded-lg shadow-lg mr-6 hidden sm:block"
+                className="hidden rounded-lg shadow-2xl ring-1 ring-white/10 transition-transform duration-300 hover:scale-[1.02] sm:block"
               />
             )}
-            <div className="text-light-text mb-4">
-              <h1 className="text-4xl font-bold">{movie.title}</h1>
-              {movie.tagline && <p className="text-xl">{movie.tagline}</p>}
+            <div className="mb-4 text-light-text">
+              <h1 className="font-display text-4xl font-bold tracking-tight text-light-text opacity-0 animate-fade-in-up sm:text-5xl">
+                {movie.title}
+              </h1>
+              {movie.tagline && (
+                <p className="mt-1 text-xl text-muted-foreground opacity-0 animate-fade-in-up animate-fade-in-up-delay-1">
+                  {movie.tagline}
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-card rounded-lg shadow-lg p-6">
+      <div className="container relative z-10 mx-auto px-4 py-8">
+        <div className="-mt-6 rounded-xl border border-border bg-card p-6 shadow-xl sm:-mt-8">
           <div className="mb-2">
             <PageBreadcrumb
               breadcrumbs={[
@@ -56,7 +62,7 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
           </div>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <Badge className="bg-secondary text-secondary-foreground text-sm font-semibold mr-2 flex items-center hover:bg-secondary/80">
+              <Badge className="mr-2 flex items-center bg-secondary text-sm font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80">
                 <Star className="mr-2 h-4 w-4" />
                 <p>{movie.vote_average.toFixed(1)}</p>
               </Badge>
@@ -69,7 +75,7 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
               {movie.genres.map((genre) => (
                 <Badge
                   key={genre.id}
-                  className="bg-secondary text-secondary-foreground text-sm font-semibold"
+                  className="bg-secondary text-sm font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80"
                 >
                   {genre.name}
                 </Badge>
@@ -113,7 +119,7 @@ export default async function Movie({ params }: { params: Promise<{ id: string }
                 href={movie.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-blue-500 hover:bg-blue-700 text-light-text font-bold py-2 px-4 rounded inline-block"
+                className="btn-primary"
               >
                 Official Homepage
               </a>

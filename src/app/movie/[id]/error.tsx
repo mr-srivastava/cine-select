@@ -14,13 +14,12 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center h-screen">
-      <h2 className="text-2xl font-bold mb-4">Something went wrong!</h2>
-      <p className="text-red-500 mb-4">{error.message}</p>
-      <button
-        onClick={() => reset()}
-        className="bg-blue-500 hover:bg-blue-700 text-light-text font-bold py-2 px-4 rounded"
-      >
+    <div className="cinema-grain flex h-screen flex-col items-center justify-center bg-dark-bg px-4">
+      <h2 className="font-display mb-4 text-2xl font-bold text-light-text">
+        Something went wrong!
+      </h2>
+      <p className="mb-6 text-destructive">{error.message}</p>
+      <button onClick={() => reset()} className="btn-primary">
         Try again
       </button>
     </div>

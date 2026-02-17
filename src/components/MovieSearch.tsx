@@ -39,7 +39,7 @@ export default function MovieSearch() {
   };
 
   return (
-    <Command className='rounded-lg border max-w-[600px] shadow-md md:min-w-[450px]'>
+    <Command className="max-w-[600px] rounded-lg border border-border bg-popover shadow-lg transition-shadow duration-200 hover:shadow-xl md:min-w-[450px]">
       <CommandInput
         value={inputValue}
         onValueChange={handleSearch}

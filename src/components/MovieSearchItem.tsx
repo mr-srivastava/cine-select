@@ -7,8 +7,8 @@ export const MovieSearchItem = ({ movie }: { movie: MovieSearchResult }) => {
   return (
     <Link href={`/movie/${movie.id}`}>
       <CommandItem
-        value={`${movie.title}-${movie.id}`} // Modified to include movie.id for uniqueness
-        className='flex items-center gap-4 px-4 py-2'
+        value={`${movie.title}-${movie.id}`}
+        className="flex items-center gap-4 px-4 py-2 transition-colors duration-150 data-[selected]:bg-accent"
       >
         <MovieSearchItemImage
           imagePath={movie.poster_path}

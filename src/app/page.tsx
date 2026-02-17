@@ -2,10 +2,17 @@ import MovieSearch from "@/components/MovieSearch";
 
 export default async function Home() {
   return (
-    <div className='flex flex-col min-h-screen items-center justify-center'>
-      <h1 className="text-4xl font-bold mb-4">CineSelect</h1>
-      <div className="w-full max-w-md">
-        <MovieSearch />
+    <div className="cinema-grain flex min-h-screen flex-col items-center justify-center bg-dark-bg">
+      <div className="relative z-10 flex flex-col items-center gap-6 px-4">
+        <h1 className="font-display text-5xl font-bold tracking-tight text-light-text opacity-0 animate-fade-in-up sm:text-6xl">
+          CineSelect
+        </h1>
+        <p className="text-muted-foreground opacity-0 animate-fade-in-up animate-fade-in-up-delay-1 text-center text-lg">
+          Search and discover movies
+        </p>
+        <div className="w-full max-w-md opacity-0 animate-fade-in-up animate-fade-in-up-delay-2">
+          <MovieSearch />
+        </div>
       </div>
     </div>
   );

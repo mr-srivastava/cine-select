@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ["var(--font-body)", "system-ui", "sans-serif"],
+  			display: ["var(--font-display)", "var(--font-body)", "system-ui", "sans-serif"],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -67,12 +71,23 @@ export default {
 			},
 			red: {
 				'500': 'hsl(var(--red-500))'
-			}
+			},
+			'cinema-accent': 'hsl(var(--cinema-accent))',
+			'cinema-accent-foreground': 'hsl(var(--cinema-accent-foreground))'
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			"fade-in-up": {
+  				from: { opacity: "0", transform: "translateY(12px)" },
+  				to: { opacity: "1", transform: "translateY(0)" }
+  			}
+  		},
+  		animation: {
+  			"fade-in-up": "fade-in-up 0.5s ease-out forwards"
   		}
   	}
   },
