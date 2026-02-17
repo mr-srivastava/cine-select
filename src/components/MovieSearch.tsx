@@ -53,7 +53,11 @@ export default function MovieSearch() {
             </div>
           ) : (
             <>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>
+                {inputValue.trim()
+                  ? `No results found for "${inputValue}".`
+                  : "Start typing to search..."}
+              </CommandEmpty>
               {movies.length > 0 && (
                 <CommandGroup heading='Movies'>
                   {movies.map((movie) => (
