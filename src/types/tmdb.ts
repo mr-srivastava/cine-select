@@ -24,24 +24,24 @@ interface Collection {
   backdrop_path: string | null;
 }
 
-interface Genre {
+export interface Genre {
   id: number;
   name: string;
 }
 
-interface ProductionCompany {
+export interface ProductionCompany {
   name: string;
   id: number;
   logo_path?: string | null;
   origin_country: string;
 }
 
-interface ProductionCountry {
+export interface ProductionCountry {
   iso_3166_1: string;
   name: string;
 }
 
-interface SpokenLanguage {
+export interface SpokenLanguage {
   english_name?: string;
   iso_639_1: string;
   name: string;
