@@ -4,11 +4,16 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import React from "react";
 
 export default async function Movie({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const movie = await fetchMovieDetails(Number(id));
+  const numericId = Number(id);
+  if (!/^\d+$/.test(id) || !Number.isInteger(numericId)) {
+    notFound();
+  }
+  const movie = await fetchMovieDetails(numericId);
 
   return (
     <div className="cinema-grain min-h-screen bg-dark-bg">

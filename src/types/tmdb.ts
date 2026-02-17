@@ -1,9 +1,13 @@
-/** Shape returned by TMDB search/movie endpoint (subset of full movie details) */
+/** Shape returned by TMDB search/list endpoints (subset of full movie details) */
 export interface MovieSearchResult {
   id: number;
   title: string;
   poster_path: string | null;
   release_date?: string;
+  backdrop_path?: string | null;
+  overview?: string;
+  vote_average?: number;
+  vote_count?: number;
 }
 
 export interface MovieSearchResponse {
