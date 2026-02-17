@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Oswald } from "next/font/google";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-body" });
@@ -17,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${montserrat.variable} ${oswald.variable} font-sans antialiased`}>
+      <body className={cn(montserrat.variable, oswald.variable, "font-sans antialiased")}>
         {children}
       </body>
     </html>
