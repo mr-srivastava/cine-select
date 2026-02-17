@@ -1,11 +1,11 @@
 "use server";
 
-import { Movie, MovieSearchResponse } from "@/types/tmdb";
+import { Movie, MovieSearchResponse, MovieSearchResult } from "@/types/tmdb";
 
 const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
-export async function searchMovies(query: string): Promise<Movie[]> {
+export async function searchMovies(query: string): Promise<MovieSearchResult[]> {
   if (!query) return [];
 
   if (!API_KEY) {

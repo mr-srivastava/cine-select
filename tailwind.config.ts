@@ -43,14 +43,32 @@ export default {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			chart: {
-  				'1': 'hsl(var(--chart-1))',
-  				'2': 'hsl(var(--chart-2))',
-  				'3': 'hsl(var(--chart-3))',
-  				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
-  			}
-  		},
+			chart: {
+				'1': 'hsl(var(--chart-1))',
+				'2': 'hsl(var(--chart-2))',
+				'3': 'hsl(var(--chart-3))',
+				'4': 'hsl(var(--chart-4))',
+				'5': 'hsl(var(--chart-5))'
+			},
+			overlay: 'hsl(var(--overlay))',
+			'dark-bg': 'hsl(var(--dark-bg))',
+			'dark-surface': 'hsl(var(--dark-surface))',
+			'light-text': 'hsl(var(--light-text))',
+			gray: {
+				'200': 'hsl(var(--gray-200))',
+				'300': 'hsl(var(--gray-300))',
+				'600': 'hsl(var(--gray-600))',
+				'700': 'hsl(var(--gray-700))',
+				'800': 'hsl(var(--gray-800))'
+			},
+			blue: {
+				'500': 'hsl(var(--blue-500))',
+				'700': 'hsl(var(--blue-700))'
+			},
+			red: {
+				'500': 'hsl(var(--red-500))'
+			}
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

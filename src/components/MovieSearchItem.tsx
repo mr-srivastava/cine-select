@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { CommandItem } from "./ui/command";
-import { Movie } from "@/types/tmdb";
+import { MovieSearchResult } from "@/types/tmdb";
 import Image from "next/image";
 
-export const MovieSearchItem = ({ movie }: { movie: Movie }) => {
+export const MovieSearchItem = ({ movie }: { movie: MovieSearchResult }) => {
   return (
     <Link href={`/movie/${movie.id}`}>
       <CommandItem
@@ -29,7 +29,7 @@ const MovieSearchItemImage = ({
   imagePath,
   altText
 }: {
-  imagePath: string;
+  imagePath: string | null;
   altText: string;
 }) => {
   return (

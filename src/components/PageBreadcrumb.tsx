@@ -8,9 +8,17 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-export default function PageBreadcrumb({breadcrumbs}: {
-  breadcrumbs: { link: string; label: string; isActive: boolean }[];
-}) {
+export interface BreadcrumbEntry {
+  link: string;
+  label: string;
+  isActive: boolean;
+}
+
+export interface PageBreadcrumbProps {
+  breadcrumbs: BreadcrumbEntry[];
+}
+
+export default function PageBreadcrumb({ breadcrumbs }: PageBreadcrumbProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
