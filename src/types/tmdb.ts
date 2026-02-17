@@ -1,8 +1,27 @@
+/** Shape returned by TMDB search/list endpoints (subset of full movie details) */
+export interface MovieSearchResult {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  release_date?: string;
+  backdrop_path?: string | null;
+  overview?: string;
+  vote_average?: number;
+  vote_count?: number;
+}
+
 export interface MovieSearchResponse {
   page: number;
-  results: Movie[];
+  results: MovieSearchResult[];
   total_pages: number;
   total_results: number;
+}
+
+interface Collection {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
 }
 
 interface Genre {
@@ -31,7 +50,7 @@ interface SpokenLanguage {
 export interface Movie {
   adult: boolean;
   backdrop_path: string;
-  belongs_to_collection: null | object; // Specify the structure of the collection if available
+  belongs_to_collection: null | Collection;
   budget: number;
   genres: Genre[];
   homepage: string;

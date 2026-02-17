@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/command";
 import { searchMovies } from "@/actions/tmdb.actions";
 import { useState } from "react";
-import { Movie } from "@/types/tmdb";
+import { MovieSearchResult } from "@/types/tmdb";
 import { Loader2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 import { MovieSearchItem } from "./MovieSearchItem";
 
 export default function MovieSearch() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<MovieSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -39,7 +39,7 @@ export default function MovieSearch() {
   };
 
   return (
-    <Command className='rounded-lg border max-w-[600px] shadow-md md:min-w-[450px]'>
+    <Command className="max-w-[600px] rounded-lg border border-border bg-popover shadow-lg transition-shadow duration-200 hover:shadow-xl md:min-w-[450px]">
       <CommandInput
         value={inputValue}
         onValueChange={handleSearch}
@@ -54,9 +54,9 @@ export default function MovieSearch() {
           ) : (
             <>
               <CommandEmpty>
-                {inputValue === ""
-                  ? "Start typing to search movies..."
-                  : "No results found."}
+                {inputValue.trim()
+                  ? `No results found for "${inputValue}".`
+                  : "Start typing to search..."}
               </CommandEmpty>
               {movies.length > 0 && (
                 <CommandGroup heading='Movies'>
