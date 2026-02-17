@@ -161,3 +161,28 @@
 .btn-primary:hover {
   background-color: hsl(var(--cinema-accent-hover));
 }
+
+/* Custom scrollbar matching cinema theme */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--cinema-accent) / 0.5) hsl(var(--dark-surface));
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--dark-surface));
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--cinema-accent) / 0.5);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--cinema-accent) / 0.7);
+}
