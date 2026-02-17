@@ -11,6 +11,9 @@ export async function fetchMovieList(
   listType: MovieListType,
   page = 1
 ): Promise<MovieSearchResult[]> {
+  const safePage =
+    typeof page === "number" && Number.isInteger(page) && page >= 1 ? page : 1;
+
   if (!API_KEY) {
     console.error("TMDB_API_KEY is not set in environment variables");
     throw new Error("TMDB API key is not configured");
@@ -18,7 +21,7 @@ export async function fetchMovieList(
 
   try {
     const response = await fetch(
-      `${BASE_URL}/movie/${listType}?api_key=${API_KEY}&language=en-US&page=${page}`,
+      `${BASE_URL}/movie/${listType}?api_key=${API_KEY}&language=en-US&page=${safePage}`,
       { cache: "no-store" }
     );
 
