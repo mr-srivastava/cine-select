@@ -26,10 +26,14 @@ export function MovieMetaBar({
         />
         <Separator orientation="vertical" className="h-6 mx-2" />
         <MovieCard.ReleaseDate release_date={release_date} />
-        <Separator orientation="vertical" className="h-6 mx-2" />
-        <span className="text-muted-foreground text-xs">
-          {runtime != null ? formatRuntime(runtime) : ""}
-        </span>
+        {runtime != null && (
+          <>
+            <Separator orientation="vertical" className="h-6 mx-2" />
+            <span className="text-muted-foreground text-xs">
+              {formatRuntime(runtime)}
+            </span>
+          </>
+        )}
       </div>
       <div className="flex gap-2">
         {genres.map((genre) => (

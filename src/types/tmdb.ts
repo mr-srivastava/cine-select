@@ -77,6 +77,45 @@ export interface Movie {
   vote_count: number;
 }
 
+function isGenre(item: unknown): item is Genre {
+  return (
+    item !== null &&
+    typeof item === "object" &&
+    typeof (item as Genre).id === "number" &&
+    typeof (item as Genre).name === "string"
+  );
+}
+
+function isProductionCompany(item: unknown): item is ProductionCompany {
+  const p = item as ProductionCompany;
+  return (
+    item !== null &&
+    typeof item === "object" &&
+    typeof p.id === "number" &&
+    typeof p.name === "string"
+  );
+}
+
+function isProductionCountry(item: unknown): item is ProductionCountry {
+  const c = item as ProductionCountry;
+  return (
+    item !== null &&
+    typeof item === "object" &&
+    typeof c.iso_3166_1 === "string" &&
+    typeof c.name === "string"
+  );
+}
+
+function isSpokenLanguage(item: unknown): item is SpokenLanguage {
+  const s = item as SpokenLanguage;
+  return (
+    item !== null &&
+    typeof item === "object" &&
+    typeof s.iso_639_1 === "string" &&
+    typeof s.name === "string"
+  );
+}
+
 /** Type guard: narrows unknown to Movie when shape matches required fields */
 export function isMovie(value: unknown): value is Movie {
   if (value === null || typeof value !== "object") return false;
@@ -86,9 +125,13 @@ export function isMovie(value: unknown): value is Movie {
     typeof o.title === "string" &&
     typeof o.overview === "string" &&
     Array.isArray(o.genres) &&
+    o.genres.every(isGenre) &&
     Array.isArray(o.production_companies) &&
+    o.production_companies.every(isProductionCompany) &&
     Array.isArray(o.production_countries) &&
+    o.production_countries.every(isProductionCountry) &&
     Array.isArray(o.spoken_languages) &&
+    o.spoken_languages.every(isSpokenLanguage) &&
     typeof o.release_date === "string" &&
     typeof o.vote_average === "number"
   );
