@@ -35,11 +35,11 @@ export function MovieMetaBar({
           </>
         )}
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {genres.map((genre) => (
           <Badge
             key={genre.id}
-            className="bg-secondary text-xs font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80"
+            className="bg-secondary text-xs font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80 whitespace-normal break-words"
           >
             {genre.name}
           </Badge>

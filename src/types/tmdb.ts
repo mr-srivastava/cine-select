@@ -92,7 +92,8 @@ function isProductionCompany(item: unknown): item is ProductionCompany {
     item !== null &&
     typeof item === "object" &&
     typeof p.id === "number" &&
-    typeof p.name === "string"
+    typeof p.name === "string" &&
+    typeof p.origin_country === "string"
   );
 }
 
@@ -124,6 +125,15 @@ export function isMovie(value: unknown): value is Movie {
     typeof o.id === "number" &&
     typeof o.title === "string" &&
     typeof o.overview === "string" &&
+    typeof o.original_title === "string" &&
+    typeof o.status === "string" &&
+    typeof o.adult === "boolean" &&
+    (typeof o.backdrop_path === "string" || o.backdrop_path === null) &&
+    (typeof o.poster_path === "string" || o.poster_path === null) &&
+    typeof o.budget === "number" &&
+    typeof o.revenue === "number" &&
+    typeof o.vote_count === "number" &&
+    (typeof o.runtime === "number" || o.runtime === null) &&
     Array.isArray(o.genres) &&
     o.genres.every(isGenre) &&
     Array.isArray(o.production_companies) &&
