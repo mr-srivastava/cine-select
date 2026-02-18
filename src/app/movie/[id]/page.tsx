@@ -1,4 +1,5 @@
 import { fetchMovieDetails } from "@/actions/tmdb.actions";
+import type { Movie } from "@/types/tmdb";
 import { notFound } from "next/navigation";
 import { MovieHero } from "./_components/MovieHero";
 import { MovieDetailsCard } from "./_components/MovieDetailsCard";
@@ -14,7 +15,7 @@ export default async function MoviePage({
     notFound();
   }
 
-  let movie;
+  let movie: Movie;
   try {
     movie = await fetchMovieDetails(numericId);
   } catch {
@@ -27,8 +28,8 @@ export default async function MoviePage({
         id={movie.id}
         title={movie.title}
         tagline={movie.tagline ?? null}
-        backdrop_path={movie.backdrop_path ? movie.backdrop_path : null}
-        poster_path={movie.poster_path ? movie.poster_path : null}
+        backdrop_path={movie.backdrop_path}
+        poster_path={movie.poster_path}
         vote_average={movie.vote_average}
         release_date={movie.release_date}
         runtime={movie.runtime ?? null}
@@ -36,13 +37,7 @@ export default async function MoviePage({
       />
       <div className="container relative z-10 mx-auto px-4 py-8">
         <div className="-mt-6 rounded-xl border border-border bg-card p-6 shadow-xl sm:-mt-8">
-          <MovieDetailsCard
-            overview={movie.overview}
-            production_companies={movie.production_companies}
-            production_countries={movie.production_countries}
-            spoken_languages={movie.spoken_languages}
-            homepage={movie.homepage || null}
-          />
+          <MovieDetailsCard movie={movie} />
         </div>
       </div>
     </div>
