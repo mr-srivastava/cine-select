@@ -1,6 +1,6 @@
 "use server";
 
-import { Movie, MovieSearchResponse, MovieSearchResult } from "@/types/tmdb";
+import { Movie, MovieSearchResponse, MovieSearchResult, isMovie } from "@/types/tmdb";
 
 const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -87,7 +87,11 @@ export async function fetchMovieDetails(movieId: number): Promise<Movie> {
       throw new Error(`Failed to fetch movie details: ${response.status} ${response.statusText}`);
     }
 
-    const data: Movie = await response.json();
+    const data: unknown = await response.json();
+    if (!isMovie(data)) {
+      console.error("TMDB movie details response shape invalid", data);
+      throw new Error("Invalid movie details response from API");
+    }
     return data;
   } catch (error) {
     console.error("Error fetching movie details:", error);
