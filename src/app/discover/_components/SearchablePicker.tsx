@@ -20,6 +20,7 @@ export type PickerOption = {
   label: string;
   value: string;
   logoPath?: string | null;
+  description?: string;
 };
 
 type SearchablePickerProps = {
@@ -29,6 +30,7 @@ type SearchablePickerProps = {
   placeholder: string;
   emptyLabel: string;
   clearLabel?: string;
+  searchPlaceholder?: string;
 };
 
 export default function SearchablePicker({
@@ -38,6 +40,7 @@ export default function SearchablePicker({
   placeholder,
   emptyLabel,
   clearLabel = "All options",
+  searchPlaceholder,
 }: SearchablePickerProps) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(value ?? "");
@@ -55,7 +58,7 @@ export default function SearchablePicker({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="h-11 w-full justify-between rounded-xl border-border/70 bg-background/80 px-4 text-left shadow-sm"
         >
           <span className={cn("truncate", !selected && "text-muted-foreground")}>
             {selected?.label ?? placeholder}
@@ -63,9 +66,9 @@ export default function SearchablePicker({
           <ChevronDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[320px] p-0" align="start">
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[280px] rounded-[24px] border-border/70 p-0" align="start">
         <Command>
-          <CommandInput placeholder={`Search ${placeholder.toLowerCase()}...`} />
+          <CommandInput placeholder={searchPlaceholder ?? `Search ${placeholder.toLowerCase()}...`} />
           <CommandList>
             <CommandEmpty>{emptyLabel}</CommandEmpty>
             <CommandGroup>
@@ -83,7 +86,7 @@ export default function SearchablePicker({
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.label}
+                  value={`${option.label} ${option.description ?? ""}`}
                   onSelect={() => {
                     setSelectedValue(option.value);
                     setOpen(false);
@@ -102,7 +105,14 @@ export default function SearchablePicker({
                         className="size-5 rounded object-cover"
                       />
                     ) : null}
-                    <span>{option.label}</span>
+                    <span className="flex flex-col">
+                      <span>{option.label}</span>
+                      {option.description ? (
+                        <span className="line-clamp-2 text-xs leading-5 text-muted-foreground">
+                          {option.description}
+                        </span>
+                      ) : null}
+                    </span>
                   </span>
                   <Check
                     className={cn("opacity-0", option.value === selectedValue && "opacity-100")}

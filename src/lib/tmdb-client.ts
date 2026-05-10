@@ -110,6 +110,23 @@ export async function searchTmdbMovies(query: string): Promise<MovieSearchResult
   return data.results;
 }
 
+export async function searchTmdbMoviesPage(query: string, page = 1): Promise<MovieSearchResponse> {
+  const trimmedQuery = query.trim();
+  if (!trimmedQuery) {
+    return {
+      page: 1,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    };
+  }
+
+  return await fetchTmdbJson<MovieSearchResponse>("/search/movie", {
+    query: trimmedQuery,
+    page,
+  });
+}
+
 export async function fetchTmdbMovie(movieId: number): Promise<Movie> {
   const payload = await tmdbFetch(`/movie/${movieId}`, {});
   const data: unknown = parseTmdbJson<unknown>(payload, `/movie/${movieId}`);

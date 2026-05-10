@@ -31,13 +31,13 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
     --overlay: 0 0% 0% / 0.8;
-    /* Cinematic palette: dark surfaces + amber spotlight accent */
+    /* Cinémathèque palette */
     --dark-bg: 240 10% 3.9%;
     --dark-surface: 240 5.9% 10%;
     --light-text: 0 0% 98%;
-    --cinema-accent: 38 92% 50%;
-    --cinema-accent-hover: 38 92% 45%;
-    --cinema-accent-foreground: 240 10% 3.9%;
+    --cinema-accent: 34 37% 86%;
+    --cinema-accent-hover: 30 31% 78%;
+    --cinema-accent-foreground: 276 27% 12%;
     --gray-200: 240 4.8% 95.9%;
     --gray-300: 240 5.9% 90%;
     --gray-600: 240 3.8% 46.1%;
@@ -53,42 +53,42 @@
     --text-small: 0.875rem;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 270 29% 9%;
+    --foreground: 34 37% 93%;
+    --card: 274 24% 11%;
+    --card-foreground: 34 37% 93%;
+    --popover: 274 24% 11%;
+    --popover-foreground: 34 37% 93%;
+    --primary: 34 37% 86%;
+    --primary-foreground: 276 27% 12%;
+    --secondary: 275 18% 19%;
+    --secondary-foreground: 34 37% 93%;
+    --muted: 276 15% 17%;
+    --muted-foreground: 28 16% 72%;
+    --accent: 277 19% 20%;
+    --accent-foreground: 34 37% 93%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 278 16% 23%;
+    --input: 278 16% 23%;
+    --ring: 34 37% 86%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --overlay: 0 0% 0% / 0.8;
-    --dark-bg: 240 10% 3.9%;
-    --dark-surface: 240 5.9% 10%;
-    --light-text: 0 0% 98%;
-    --cinema-accent: 38 92% 50%;
-    --cinema-accent-hover: 38 92% 55%;
-    --cinema-accent-foreground: 240 10% 3.9%;
-    --gray-200: 240 3.7% 15.9%;
-    --gray-300: 240 3.7% 15.9%;
-    --gray-600: 240 5% 64.9%;
-    --gray-700: 240 5% 64.9%;
-    --gray-800: 240 10% 3.9%;
+    --dark-bg: 270 29% 9%;
+    --dark-surface: 274 24% 11%;
+    --light-text: 34 37% 93%;
+    --cinema-accent: 34 37% 86%;
+    --cinema-accent-hover: 30 31% 78%;
+    --cinema-accent-foreground: 276 27% 12%;
+    --gray-200: 276 15% 17%;
+    --gray-300: 278 16% 23%;
+    --gray-600: 28 16% 72%;
+    --gray-700: 28 16% 72%;
+    --gray-800: 270 29% 9%;
     --blue-500: 217 91% 60%;
     --blue-700: 217 91% 45%;
     --red-500: 0 62.8% 30.6%;
@@ -101,6 +101,10 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(122, 90, 143, 0.18), transparent 34%),
+      radial-gradient(circle at top right, rgba(242, 226, 196, 0.08), transparent 22%),
+      linear-gradient(180deg, rgba(28, 18, 35, 0.96) 0%, rgba(19, 12, 26, 1) 100%);
   }
 }
 
@@ -121,6 +125,14 @@
   box-shadow:
     inset 0 0 12rem 2rem hsl(var(--dark-bg)),
     inset 0 0 8rem 3rem rgba(0, 0, 0, 0.45);
+}
+.cinema-vignette::after {
+  content: "";
+  position: absolute;
+  inset: 24px 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent);
+  opacity: 0.45;
 }
 
 /* Staggered reveal animation */
@@ -154,11 +166,14 @@
 
 /* Semantic primary button (cinema accent) */
 .btn-primary {
-  @apply inline-flex items-center justify-center font-semibold rounded-md transition-colors duration-200;
+  @apply inline-flex items-center justify-center rounded-full font-semibold transition-colors duration-200;
 
   background-color: hsl(var(--cinema-accent));
   color: hsl(var(--cinema-accent-foreground));
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.25rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
 }
 .btn-primary:hover {
   background-color: hsl(var(--cinema-accent-hover));

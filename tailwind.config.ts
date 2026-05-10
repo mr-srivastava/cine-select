@@ -11,7 +11,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-body)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "var(--font-body)", "system-ui", "sans-serif"],
+        display: ['"Iowan Old Style"', '"Palatino Linotype"', '"Book Antiqua"', "Georgia", "serif"],
       },
       colors: {
         background: 'hsl(var(--background))',

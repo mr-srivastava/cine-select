@@ -11,9 +11,9 @@ import Link from "next/link";
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Card>
+    <Card className="rounded-[30px] border-border/60 bg-card/90 shadow-[0_24px_90px_rgba(0,0,0,0.22)]">
       <CardHeader>
-        <CardTitle className="font-display text-2xl text-light-text">{title}</CardTitle>
+        <CardTitle className="font-display text-2xl uppercase tracking-[0.08em] text-light-text">{title}</CardTitle>
       </CardHeader>
       <CardContent>{children}</CardContent>
     </Card>
@@ -34,7 +34,7 @@ function PersonCard({ person, role }: { person: MovieCreditCast; role?: string }
           fallback={<span>CS</span>}
         />
         <div className="mt-2 space-y-0.5">
-          <p className="line-clamp-2 text-sm font-medium text-light-text group-hover:text-primary">{person.name}</p>
+          <p className="line-clamp-2 font-display text-sm uppercase tracking-[0.06em] text-light-text group-hover:text-primary">{person.name}</p>
           {role ? <p className="text-xs text-muted-foreground">{role}</p> : null}
         </div>
       </Link>
@@ -85,7 +85,7 @@ export default async function MovieExtraSections({ movieId }: { movieId: number 
 
   return (
     <div className="mt-8 flex flex-col gap-6">
-      <SectionCard title="Recommended for you">
+      <SectionCard title="Adjacent viewings">
         {recommendations.results.length > 0 ? (
           <ScrollArea className="w-full">
             <div className="custom-scrollbar flex gap-4 pb-2">
@@ -96,16 +96,16 @@ export default async function MovieExtraSections({ movieId }: { movieId: number 
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         ) : (
-          <p className="text-sm text-muted-foreground">No recommendations are available for this title yet.</p>
+          <p className="text-sm text-muted-foreground">No adjacent titles are recorded for this entry yet.</p>
         )}
       </SectionCard>
 
-      <SectionCard title="Where to watch">
+      <SectionCard title="Viewing access">
         {providerInfo ? (
           <div className="flex flex-col gap-4">
             {providerInfo.link ? (
               <a href={providerInfo.link} target="_blank" rel="noreferrer" className="text-sm text-muted-foreground underline">
-                Open TMDB provider page
+                Open provider reference
               </a>
             ) : null}
             <div className="flex flex-wrap gap-3">
@@ -115,11 +115,11 @@ export default async function MovieExtraSections({ movieId }: { movieId: number 
             </div>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">No watch-provider data is available for this title.</p>
+          <p className="text-sm text-muted-foreground">No provider data is available for this title at the moment.</p>
         )}
       </SectionCard>
 
-      <SectionCard title="Cast">
+      <SectionCard title="Principal cast">
         {cast.length > 0 ? (
           <ScrollArea className="w-full">
             <div className="custom-scrollbar flex gap-4 pb-2">
@@ -130,7 +130,7 @@ export default async function MovieExtraSections({ movieId }: { movieId: number 
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         ) : (
-          <p className="text-sm text-muted-foreground">No cast information is available for this title.</p>
+          <p className="text-sm text-muted-foreground">No cast information is recorded for this title.</p>
         )}
       </SectionCard>
 

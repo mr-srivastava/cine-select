@@ -14,6 +14,7 @@ import {
   fetchTmdbRecommendations,
   fetchTmdbWatchProviders,
   searchTmdbMovies,
+  searchTmdbMoviesPage,
   TmdbError,
 } from "@/lib/tmdb-client";
 
@@ -51,6 +52,23 @@ export async function searchMovies(query: string): Promise<MovieSearchResult[]> 
       console.error("Error searching movies:", error);
     }
     return [];
+  }
+}
+
+export async function searchMoviesPage(query: string, page = 1) {
+  try {
+    return await searchTmdbMoviesPage(query, page);
+  } catch (error) {
+    if (error instanceof TmdbError) {
+      console.error("TMDB paginated search request failed:", error.message, {
+        status: error.status,
+        endpoint: error.endpoint,
+      });
+    } else {
+      console.error("Error searching paginated movies:", error);
+    }
+
+    return { page: 1, results: [], total_pages: 0, total_results: 0 };
   }
 }
 

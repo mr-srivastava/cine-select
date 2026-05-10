@@ -1,5 +1,6 @@
 import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { MovieCard } from "@/components/MovieCard";
+import WatchlistToggleButton from "@/components/WatchlistToggleButton";
 import { MovieMetaBar } from "./MovieMetaBar";
 import type { Genre } from "@/types/tmdb";
 import Image from "next/image";
@@ -29,7 +30,7 @@ export function MovieHero({
   genres,
 }: MovieHeroProps) {
   return (
-    <div className="cinema-vignette relative h-[50vh] min-h-[280px] bg-dark-surface">
+    <div className="cinema-vignette relative min-h-[420px] bg-dark-surface">
       {backdrop_path ? (
         <Image
           src={tmdbImageUrl(backdrop_path, "original")}
@@ -39,15 +40,15 @@ export function MovieHero({
           sizes="100vw"
           placeholder="blur"
           blurDataURL={IMAGE_BLUR_DATA_URL}
-          className="object-cover opacity-50"
+          className="object-cover opacity-45"
           aria-hidden="true"
         />
       ) : null}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-transparent from-0% via-black/50 via-30% to-[hsl(var(--dark-bg))] to-100%"
+        className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[hsl(var(--dark-bg))]"
         aria-hidden
       />
-      <div className="container relative z-10 mx-auto flex h-full flex-col justify-end px-4 pb-8">
+      <div className="container relative z-10 mx-auto flex min-h-[420px] flex-col justify-end px-4 pb-10 pt-10">
         <div className="mb-4">
           <PageBreadcrumb
             breadcrumbs={[
@@ -63,15 +64,18 @@ export function MovieHero({
               title={title}
               width={200}
               height={300}
-              className="hidden rounded-lg shadow-2xl ring-1 ring-white/10 transition-transform duration-300 hover:scale-[1.02] sm:block"
+              className="hidden rounded-[24px] shadow-2xl ring-1 ring-white/10 transition-transform duration-300 hover:scale-[1.02] sm:block"
             />
           ) : null}
-          <div className="mb-4 text-light-text">
-            <h1 className="font-display text-4xl font-bold tracking-tight text-light-text opacity-0 animate-fade-in-up sm:text-5xl">
+          <div className="mb-4 max-w-3xl text-light-text">
+            <p className="opacity-0 animate-fade-in-up text-[11px] uppercase tracking-[0.38em] text-primary/80">
+              Film dossier
+            </p>
+            <h1 className="mt-3 font-display text-4xl font-bold uppercase tracking-[0.1em] text-light-text opacity-0 animate-fade-in-up sm:text-5xl">
               {title}
             </h1>
             {tagline ? (
-              <p className="mt-1 text-xl text-muted-foreground opacity-0 animate-fade-in-up animate-fade-in-up-delay-1">
+              <p className="mt-2 max-w-2xl text-lg italic text-muted-foreground opacity-0 animate-fade-in-up animate-fade-in-up-delay-1 sm:text-xl">
                 {tagline}
               </p>
             ) : null}
@@ -81,6 +85,13 @@ export function MovieHero({
                 release_date={release_date}
                 runtime={runtime}
                 genres={genres}
+              />
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <WatchlistToggleButton
+                movie={{ id, title, poster_path, release_date, vote_average }}
+                className="rounded-full border-border/60 bg-background/75 px-5 backdrop-blur"
+                size="lg"
               />
             </div>
           </div>

@@ -97,7 +97,7 @@ export default async function MoviePage({
         genres={movie.genres}
       />
       <div className="container relative z-10 mx-auto px-4 py-8">
-        <div className="-mt-6 rounded-xl border border-border bg-card p-6 shadow-xl sm:-mt-8">
+        <div className="-mt-6 rounded-[30px] border border-border/70 bg-card/95 p-6 shadow-[0_32px_120px_rgba(0,0,0,0.28)] backdrop-blur sm:-mt-8 sm:p-8">
           <MovieDetailsCard movie={movie} />
         </div>
         <MovieExtraSections movieId={movie.id} />

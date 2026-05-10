@@ -9,6 +9,7 @@ type RangeProps = {
   ratingMax: number;
   runtimeMin: number;
   runtimeMax: number;
+  compact?: boolean;
 };
 
 function RangeField({
@@ -22,6 +23,7 @@ function RangeField({
   step,
   nameMin,
   nameMax,
+  compact,
 }: {
   title: string;
   description: string;
@@ -33,15 +35,24 @@ function RangeField({
   step: number;
   nameMin: string;
   nameMax: string;
+  compact?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-border/80 bg-background/60 p-4 shadow-sm">
-      <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
+    <div
+      className={
+        compact
+          ? "flex flex-col gap-3 rounded-[24px] border border-border/70 bg-background/70 p-4"
+          : "flex flex-col gap-4 rounded-[24px] border border-border/80 bg-background/60 p-4 shadow-sm"
+      }
+    >
+      <div className={compact ? "flex flex-col gap-3" : "flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between"}>
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">{title}</p>
-          <p className="max-w-[16rem] text-xs leading-5 text-muted-foreground">{description}</p>
+          <p className="font-display text-base tracking-[0.04em] text-foreground">{title}</p>
+          <p className={compact ? "text-xs leading-5 text-muted-foreground" : "max-w-[16rem] text-xs leading-5 text-muted-foreground"}>
+            {description}
+          </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 xl:justify-end">
+        <div className={compact ? "flex items-center gap-2" : "flex flex-wrap items-center gap-2 xl:justify-end"}>
           <Input
             value={value[0]}
             onChange={(event) => {
@@ -51,9 +62,9 @@ function RangeField({
               }
             }}
             inputMode="numeric"
-            className="w-20"
+            className={compact ? "h-9 w-20" : "w-20"}
           />
-          <span className="text-xs text-muted-foreground">to</span>
+          <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">to</span>
           <Input
             value={value[1]}
             onChange={(event) => {
@@ -63,7 +74,7 @@ function RangeField({
               }
             }}
             inputMode="numeric"
-            className="w-20"
+            className={compact ? "h-9 w-20" : "w-20"}
           />
           {suffix ? <span className="text-xs text-muted-foreground">{suffix}</span> : null}
         </div>
@@ -90,6 +101,7 @@ export default function DiscoverRangeFilters({
   ratingMax,
   runtimeMin,
   runtimeMax,
+  compact = false,
 }: RangeProps) {
   const [ratingRange, setRatingRange] = React.useState<[number, number]>([ratingMin, ratingMax]);
   const [runtimeRange, setRuntimeRange] = React.useState<[number, number]>([runtimeMin, runtimeMax]);
@@ -103,10 +115,10 @@ export default function DiscoverRangeFilters({
   }, [runtimeMin, runtimeMax]);
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className={compact ? "grid gap-3" : "grid gap-4 lg:grid-cols-2"}>
       <RangeField
         title="Rating"
-        description="Filter movies by average TMDB score."
+        description="Narrow the catalogue by average TMDB standing."
         min={0}
         max={10}
         value={ratingRange}
@@ -115,10 +127,11 @@ export default function DiscoverRangeFilters({
         step={0.1}
         nameMin="rating_min"
         nameMax="rating_max"
+        compact={compact}
       />
       <RangeField
         title="Runtime"
-        description="Filter movies by duration in minutes."
+        description="Limit the programme by running time in minutes."
         min={0}
         max={300}
         value={runtimeRange}
@@ -127,6 +140,7 @@ export default function DiscoverRangeFilters({
         step={5}
         nameMin="runtime_min"
         nameMax="runtime_max"
+        compact={compact}
       />
     </div>
   );

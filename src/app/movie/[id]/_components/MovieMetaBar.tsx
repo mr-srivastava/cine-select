@@ -21,8 +21,8 @@ export function MovieMetaBar({
   return (
     <div className="flex flex-col gap-2 mb-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Badge className="flex-none gap-1 border-0 bg-black/60 text-white backdrop-blur-sm">
-          <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+        <Badge className="flex-none gap-1 border border-white/10 bg-black/60 text-white backdrop-blur-sm">
+          <Star className="h-3 w-3 fill-primary text-primary" />
           {vote_average.toFixed(1)}
         </Badge>
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
@@ -40,7 +40,7 @@ export function MovieMetaBar({
         {genres.map((genre) => (
           <Badge
             key={genre.id}
-            className="bg-secondary text-xs font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80 whitespace-normal break-words"
+            className="whitespace-normal break-words border border-border/60 bg-secondary text-xs font-semibold uppercase tracking-[0.16em] text-secondary-foreground transition-colors duration-200 hover:bg-secondary/80"
           >
             {genre.name}
           </Badge>

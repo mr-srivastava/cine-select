@@ -18,7 +18,7 @@ function MovieCardRoot({ movieId, children, className }: MovieCardRootProps) {
   return (
     <Link
       href={`/movie/${movieId}`}
-      className={cn("group flex w-[140px] flex-shrink-0 flex-col transition-transform duration-200 hover:scale-[1.02] sm:w-[160px]", className)}
+      className={cn("group flex w-[150px] flex-shrink-0 flex-col transition-transform duration-200 hover:translateY(-2px) sm:w-[172px]", className)}
     >
       {children}
     </Link>
@@ -52,7 +52,7 @@ function MovieCardPoster({
 }: MovieCardPosterProps) {
   const posterContainerClassName = width && height
     ? ""
-    : "relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-muted ring-1 ring-white/10";
+    : "relative aspect-[2/3] w-full overflow-hidden rounded-[22px] bg-muted ring-1 ring-white/10";
   const fallbackStyle = width && height ? { width, height } : undefined;
   const defaultFallback = (
     <span className="flex flex-col items-center gap-1">
@@ -84,7 +84,7 @@ function MovieCardPoster({
             sizes={sizes || "(max-width: 640px) 140px, 160px"}
             placeholder="blur"
             blurDataURL={IMAGE_BLUR_DATA_URL}
-            className={cn("object-cover transition-opacity duration-200 group-hover:opacity-90", className)}
+            className={cn("object-cover transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90", className)}
           />
         </div>
       );
@@ -116,8 +116,8 @@ function MovieCardRating({ vote_average, className }: MovieCardRatingProps) {
   if (vote_average == null || vote_average <= 0) return null;
 
   return (
-    <Badge className={cn("absolute right-2 top-2 gap-1 bg-black/70 text-white border-0", className)}>
-      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+    <Badge className={cn("absolute left-2 top-2 gap-1 border border-white/10 bg-black/65 text-white", className)}>
+      <Star className="h-3 w-3 fill-primary text-primary" />
       {vote_average.toFixed(1)}
     </Badge>
   );
@@ -130,7 +130,7 @@ interface MovieCardContentProps {
 
 function MovieCardContent({ children, className }: MovieCardContentProps) {
   return (
-    <div className={cn("mt-2 flex flex-col gap-0.5", className)}>
+    <div className={cn("mt-3 flex flex-col gap-1", className)}>
       {children}
     </div>
   );
@@ -143,7 +143,7 @@ interface MovieCardTitleProps {
 
 function MovieCardTitle({ title, className }: MovieCardTitleProps) {
   return (
-    <span className={cn("line-clamp-2 text-sm font-medium text-light-text group-hover:text-primary", className)}>
+    <span className={cn("line-clamp-2 font-display text-base uppercase tracking-[0.06em] text-light-text group-hover:text-primary", className)}>
       {title}
     </span>
   );
@@ -158,7 +158,7 @@ function MovieCardReleaseDate({ release_date, className }: MovieCardReleaseDateP
   if (!release_date) return null;
 
   return (
-    <span className={cn("text-xs text-muted-foreground", className)}>
+    <span className={cn("text-xs uppercase tracking-[0.2em] text-muted-foreground", className)}>
       {formatReleaseDate(release_date)}
     </span>
   );

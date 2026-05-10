@@ -39,8 +39,8 @@ type MovieDetailsCardProps = {
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-3">
-      <dt className="font-display text-sm font-semibold tracking-tight text-muted-foreground shrink-0 sm:w-32">
+    <div className="flex flex-col gap-1 rounded-[20px] border border-border/50 bg-background/35 px-4 py-3 sm:flex-row sm:gap-4">
+      <dt className="shrink-0 font-display text-sm uppercase tracking-[0.18em] text-muted-foreground sm:w-40">
         {label}
       </dt>
       <dd className="text-sm text-foreground">{value}</dd>
@@ -59,7 +59,7 @@ function Section({
 }) {
   return (
     <section className={className}>
-      <h2 className="font-display text-xl font-semibold tracking-tight mb-3 text-foreground">
+      <h2 className="mb-3 font-display text-xl font-semibold uppercase tracking-[0.1em] text-foreground">
         {title}
       </h2>
       {children}
@@ -86,21 +86,19 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Overview – full width */}
-      <p className={`text-lg leading-relaxed text-foreground ${anim}`}>
-        {movie.overview}
-      </p>
+      <div className={anim}>
+        <p className="text-[11px] uppercase tracking-[0.34em] text-muted-foreground">Synopsis</p>
+        <p className="mt-4 text-lg leading-relaxed text-foreground">{movie.overview}</p>
+      </div>
 
       <Separator
         className={`${anim} animate-fade-in-up-delay-1`}
         aria-hidden
       />
 
-      {/* Details: 2-col grid on md+, single column on small; only rendered blocks flow into grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-        {/* Key facts */}
         {hasFacts && (
-          <Section title="Details" className={anim}>
+          <Section title="Record details" className={anim}>
             <dl className="flex flex-col gap-3">
               {showOriginalTitle && (
                 <DetailRow label="Original title" value={movie.original_title!} />
@@ -147,9 +145,8 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
           </Section>
         )}
 
-        {/* Box office */}
         {hasBoxOffice && (
-          <Section title="Box office" className={anim}>
+          <Section title="Commercial trace" className={anim}>
             <dl className="flex flex-col gap-3">
               {movie.budget > 0 && (
                 <DetailRow label="Budget" value={formatCurrency(movie.budget)} />
@@ -169,19 +166,17 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
           </Section>
         )}
 
-        {/* Collection */}
         {hasCollection && (
           <Section
-            title="Collection"
+            title="Series placement"
             className={`md:col-span-2 ${anim}`}
           >
             <p className="text-sm text-muted-foreground">
-              Part of the {movie.belongs_to_collection!.name} collection
+              Filed as part of the {movie.belongs_to_collection!.name} collection.
             </p>
           </Section>
         )}
 
-        {/* Production companies */}
         <Section title="Production companies" className={anim}>
           {movie.production_companies.length > 0 ? (
             <ul className="flex flex-col gap-1.5">
@@ -199,7 +194,6 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
           )}
         </Section>
 
-        {/* Production countries */}
         <Section title="Production countries" className={anim}>
           {movie.production_countries.length > 0 ? (
             <ul className="flex flex-col gap-1.5">
@@ -219,7 +213,6 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
           )}
         </Section>
 
-        {/* Country of origin */}
         {hasOriginCountry && (
           <Section title="Country of origin" className={anim}>
             <p className="text-sm text-muted-foreground">
@@ -228,7 +221,6 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
           </Section>
         )}
 
-        {/* Spoken languages – full width when alone in row, or paired */}
         <Section
           title="Spoken languages"
           className={`opacity-0 animate-fade-in-up animate-fade-in-up-delay-3 ${hasOriginCountry ? "" : "md:col-span-2"}`}
@@ -249,7 +241,6 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
           )}
         </Section>
 
-        {/* External links – full width, flex row */}
         {hasLinks && (
           <div
             className={`flex flex-wrap items-center gap-3 md:col-span-2 opacity-0 animate-fade-in-up animate-fade-in-up-delay-3`}
@@ -259,7 +250,7 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
                 href={movie.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary transition-transform duration-200 hover:scale-[1.02]"
+                className="btn-primary rounded-full px-5 transition-transform duration-200 hover:scale-[1.02]"
               >
                 Official website
               </a>
@@ -269,9 +260,9 @@ export function MovieDetailsCard({ movie }: MovieDetailsCardProps) {
                 href={`https://www.imdb.com/title/${movie.imdb_id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center font-semibold rounded-md border border-border bg-transparent text-foreground hover:bg-muted transition-colors duration-200 px-4 py-2 text-sm"
+                className="inline-flex items-center justify-center rounded-full border border-border bg-transparent px-4 py-2 text-sm font-semibold text-foreground transition-colors duration-200 hover:bg-muted"
               >
-                View on IMDb
+                IMDb dossier
               </a>
             )}
           </div>

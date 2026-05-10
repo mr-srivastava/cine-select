@@ -1,16 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandList
+  CommandList,
+  CommandSeparator,
 } from "@/components/ui/command";
 import { searchMovies } from "@/actions/tmdb.actions";
 import { useRef, useState } from "react";
 import { MovieSearchResult } from "@/types/tmdb";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 import { MovieSearchItem } from "./MovieSearchItem";
 
@@ -46,11 +48,11 @@ export default function MovieSearch() {
   };
 
   return (
-    <Command className="max-w-[600px] rounded-xl border border-border/80 bg-popover/95 shadow-[0_20px_60px_-24px_rgba(0,0,0,0.65)] backdrop-blur transition-shadow duration-200 hover:shadow-[0_24px_72px_-24px_rgba(0,0,0,0.72)] md:min-w-[450px]">
+    <Command className="max-w-[720px] rounded-[30px] border border-border/80 bg-popover/95 shadow-[0_20px_60px_-24px_rgba(0,0,0,0.65)] backdrop-blur transition-shadow duration-200 hover:shadow-[0_24px_72px_-24px_rgba(0,0,0,0.72)] md:min-w-[520px]">
       <CommandInput
         value={inputValue}
         onValueChange={handleSearch}
-        placeholder="Search movies..."
+        placeholder="Search a title and open its dossier..."
       />
       {inputValue && (
         <CommandList>
@@ -62,16 +64,28 @@ export default function MovieSearch() {
             <>
               <CommandEmpty>
                 {inputValue.trim()
-                  ? `No results found for "${inputValue}".`
-                  : "Start typing to search for a title, actor, or keyword."}
+                  ? `No titles surfaced for "${inputValue}".`
+                  : "Begin typing to call up a film record."}
               </CommandEmpty>
               {movies.length > 0 && (
-                <CommandGroup heading="Movies">
+                <CommandGroup heading="Matching dossiers">
                   {movies.map((movie) => (
                     <MovieSearchItem key={movie.id} movie={movie} />
                   ))}
                 </CommandGroup>
               )}
+              {inputValue.trim() ? (
+                <>
+                  <CommandSeparator />
+                  <Link
+                    href={`/discover?q=${encodeURIComponent(inputValue.trim())}`}
+                    className="flex items-center justify-between px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <span>See all results in the catalogue</span>
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </>
+              ) : null}
             </>
           )}
         </CommandList>

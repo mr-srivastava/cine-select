@@ -8,6 +8,8 @@ export interface MovieSearchResult {
   overview?: string;
   vote_average?: number;
   vote_count?: number;
+  genre_ids?: number[];
+  original_language?: string;
 }
 
 export interface MovieSearchResponse {
