@@ -1,10 +1,9 @@
 import { fetchPersonDetails, fetchPersonMovieCredits } from "@/actions/tmdb.actions";
-import MovieCard from "@/components/MovieCard";
+import MovieCard, { MovieCard as MovieCardParts } from "@/components/MovieCard";
 import PageBreadcrumb from "@/components/PageBreadcrumb";
-import { IMAGE_BLUR_DATA_URL, tmdbImageUrl } from "@/lib/image";
+import { tmdbImageUrl } from "@/lib/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 
 function buildDescription(name: string, biography: string) {
   const base = biography.trim();
@@ -90,23 +89,14 @@ export default async function PersonPage({
 
         <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
           <div className="space-y-4">
-            <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-muted ring-1 ring-white/10">
-              {person.profile_path ? (
-                <Image
-                  src={tmdbImageUrl(person.profile_path, "w500")}
-                  alt={person.name}
-                  fill
-                  sizes="240px"
-                  placeholder="blur"
-                  blurDataURL={IMAGE_BLUR_DATA_URL}
-                  className="object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted via-muted to-background text-2xl font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-                  {person.name.slice(0, 2)}
-                </div>
-              )}
-            </div>
+            <MovieCardParts.Poster
+              poster_path={person.profile_path}
+              title={person.name}
+              sizes="240px"
+              containerClassName="rounded-xl"
+              fallbackClassName="text-2xl font-semibold uppercase tracking-[0.3em]"
+              fallback={<span>{person.name.slice(0, 2)}</span>}
+            />
             {person.homepage ? (
               <a href={person.homepage} target="_blank" rel="noreferrer" className="btn-primary w-full">
                 Official site

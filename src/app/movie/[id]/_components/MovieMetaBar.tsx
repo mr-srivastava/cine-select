@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatRuntime } from "@/lib/datetime.util";
 import type { Genre } from "@/types/tmdb";
+import { Star } from "lucide-react";
 
 type MovieMetaBarProps = {
   vote_average: number;
@@ -19,16 +20,16 @@ export function MovieMetaBar({
 }: MovieMetaBarProps) {
   return (
     <div className="flex flex-col gap-2 mb-4">
-      <div className="flex items-center">
-        <MovieCard.Rating
-          vote_average={vote_average}
-          className="relative right-0 top-0 mr-2"
-        />
-        <Separator orientation="vertical" className="h-6 mx-2" />
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge className="flex-none gap-1 border-0 bg-black/60 text-white backdrop-blur-sm">
+          <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+          {vote_average.toFixed(1)}
+        </Badge>
+        <Separator orientation="vertical" className="hidden h-6 sm:block" />
         <MovieCard.ReleaseDate release_date={release_date} />
         {runtime != null && (
           <>
-            <Separator orientation="vertical" className="h-6 mx-2" />
+            <Separator orientation="vertical" className="hidden h-6 sm:block" />
             <span className="text-muted-foreground text-xs">
               {formatRuntime(runtime)}
             </span>

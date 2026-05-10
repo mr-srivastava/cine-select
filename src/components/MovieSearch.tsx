@@ -46,27 +46,27 @@ export default function MovieSearch() {
   };
 
   return (
-    <Command className="max-w-[600px] rounded-lg border border-border bg-popover shadow-lg transition-shadow duration-200 hover:shadow-xl md:min-w-[450px]">
+    <Command className="max-w-[600px] rounded-xl border border-border/80 bg-popover/95 shadow-[0_20px_60px_-24px_rgba(0,0,0,0.65)] backdrop-blur transition-shadow duration-200 hover:shadow-[0_24px_72px_-24px_rgba(0,0,0,0.72)] md:min-w-[450px]">
       <CommandInput
         value={inputValue}
         onValueChange={handleSearch}
-        placeholder='Search movies...'
+        placeholder="Search movies..."
       />
       {inputValue && (
         <CommandList>
           {isLoading ? (
-            <div className='py-6 text-center'>
-              <Loader2 className='h-6 w-6 animate-spin mx-auto text-muted-foreground' />
+            <div className="py-6 text-center">
+              <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : (
             <>
               <CommandEmpty>
                 {inputValue.trim()
                   ? `No results found for "${inputValue}".`
-                  : "Start typing to search..."}
+                  : "Start typing to search for a title, actor, or keyword."}
               </CommandEmpty>
               {movies.length > 0 && (
-                <CommandGroup heading='Movies'>
+                <CommandGroup heading="Movies">
                   {movies.map((movie) => (
                     <MovieSearchItem key={movie.id} movie={movie} />
                   ))}

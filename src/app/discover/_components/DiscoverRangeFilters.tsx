@@ -35,13 +35,13 @@ function RangeField({
   nameMax: string;
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
-      <div className="flex items-center justify-between gap-3">
-        <div>
+    <div className="flex flex-col gap-4 rounded-xl border border-border/80 bg-background/60 p-4 shadow-sm">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
+        <div className="space-y-1">
           <p className="text-sm font-medium text-foreground">{title}</p>
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <p className="max-w-[16rem] text-xs leading-5 text-muted-foreground">{description}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 xl:justify-end">
           <Input
             value={value[0]}
             onChange={(event) => {
@@ -69,13 +69,15 @@ function RangeField({
         </div>
       </div>
 
-      <Slider
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onValueChange={(next) => onValueChange([next[0] ?? min, next[1] ?? max])}
-      />
+      <div className="px-1">
+        <Slider
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onValueChange={(next) => onValueChange([next[0] ?? min, next[1] ?? max])}
+        />
+      </div>
 
       <input type="hidden" name={nameMin} value={value[0]} />
       <input type="hidden" name={nameMax} value={value[1]} />

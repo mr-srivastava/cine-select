@@ -1,10 +1,10 @@
 import { fetchMovieCredits, fetchMovieRecommendations, fetchMovieWatchProviders } from "@/actions/tmdb.actions";
-import MovieCard from "@/components/MovieCard";
+import MovieCard, { MovieCard as MovieCardParts } from "@/components/MovieCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IMAGE_BLUR_DATA_URL, tmdbImageUrl } from "@/lib/image";
+import { tmdbImageUrl } from "@/lib/image";
 import type { MovieCreditCast, MovieSearchResult, WatchProviderCountryInfo } from "@/types/tmdb";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,23 +24,15 @@ function PersonCard({ person, role }: { person: MovieCreditCast; role?: string }
   return (
     <Button asChild variant="ghost" className="h-auto w-[110px] flex-shrink-0 p-0">
       <Link href={`/person/${person.id}`} className="group flex flex-col items-start">
-        <div className="relative aspect-[2/3] w-[110px] overflow-hidden rounded-lg bg-muted ring-1 ring-white/10">
-          {person.profile_path ? (
-            <Image
-              src={tmdbImageUrl(person.profile_path, "w500")}
-              alt={person.name}
-              fill
-              sizes="110px"
-              placeholder="blur"
-              blurDataURL={IMAGE_BLUR_DATA_URL}
-              className="object-cover transition-transform duration-200 group-hover:scale-[1.03]"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted via-muted to-background text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              CS
-            </div>
-          )}
-        </div>
+        <MovieCardParts.Poster
+          poster_path={person.profile_path}
+          title={person.name}
+          sizes="110px"
+          containerClassName="w-[110px]"
+          className="object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+          fallbackClassName="text-[10px] font-semibold uppercase tracking-[0.2em]"
+          fallback={<span>CS</span>}
+        />
         <div className="mt-2 space-y-0.5">
           <p className="line-clamp-2 text-sm font-medium text-light-text group-hover:text-primary">{person.name}</p>
           {role ? <p className="text-xs text-muted-foreground">{role}</p> : null}

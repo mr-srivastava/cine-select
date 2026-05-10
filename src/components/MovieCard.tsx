@@ -32,7 +32,10 @@ interface MovieCardPosterProps {
   width?: number;
   height?: number;
   className?: string;
+  containerClassName?: string;
   fallbackClassName?: string;
+  fallback?: ReactNode;
+  imageSize?: "w92" | "w500" | "original";
 }
 
 function MovieCardPoster({
@@ -42,18 +45,27 @@ function MovieCardPoster({
   width,
   height,
   className = "",
+  containerClassName = "",
   fallbackClassName = "",
+  fallback,
+  imageSize = "w500",
 }: MovieCardPosterProps) {
-  const containerClassName = width && height
+  const posterContainerClassName = width && height
     ? ""
     : "relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-muted ring-1 ring-white/10";
   const fallbackStyle = width && height ? { width, height } : undefined;
+  const defaultFallback = (
+    <span className="flex flex-col items-center gap-1">
+      <span className="text-3xl leading-none">CineSelect</span>
+      <span className="text-[10px] uppercase tracking-[0.35em]">No poster</span>
+    </span>
+  );
 
   if (poster_path) {
     if (width && height) {
       return (
         <Image
-          src={tmdbImageUrl(poster_path, "w500")}
+          src={tmdbImageUrl(poster_path, imageSize)}
           alt={title}
           width={width}
           height={height}
@@ -64,9 +76,9 @@ function MovieCardPoster({
       );
     } else {
       return (
-        <div className={containerClassName}>
+        <div className={cn(posterContainerClassName, containerClassName)}>
           <Image
-            src={tmdbImageUrl(poster_path, "w500")}
+            src={tmdbImageUrl(poster_path, imageSize)}
             alt={title}
             fill
             sizes={sizes || "(max-width: 640px) 140px, 160px"}
@@ -82,6 +94,7 @@ function MovieCardPoster({
   return (
     <div
       className={cn(
+        posterContainerClassName,
         containerClassName,
         "flex h-full w-full items-center justify-center bg-gradient-to-br from-muted via-muted to-background text-muted-foreground",
         fallbackClassName
@@ -89,10 +102,7 @@ function MovieCardPoster({
       style={fallbackStyle}
       aria-hidden="true"
     >
-      <span className="flex flex-col items-center gap-1">
-        <span className="text-3xl leading-none">CineSelect</span>
-        <span className="text-[10px] uppercase tracking-[0.35em]">No poster</span>
-      </span>
+      {fallback ?? defaultFallback}
     </div>
   );
 }

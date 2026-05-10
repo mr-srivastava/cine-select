@@ -21,6 +21,16 @@ export function formatReleaseDate(dateString: string): string {
   return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
 }
 
+export function formatReleaseYear(dateString: string): string {
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown year";
+  }
+
+  return String(date.getFullYear());
+}
+
 export function formatRuntime(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;

@@ -1,22 +1,18 @@
 import { fetchDiscoverMovies, fetchWatchProviderList } from "@/actions/tmdb.actions";
 import MovieCard from "@/components/MovieCard";
 import PageBreadcrumb from "@/components/PageBreadcrumb";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Metadata } from "next";
-import Link from "next/link";
-import DiscoverRangeFilters from "./_components/DiscoverRangeFilters";
-import SearchablePicker from "./_components/SearchablePicker";
+import DiscoverFiltersCard from "./_components/DiscoverFiltersCard";
 
 const GENRES = [
   ["28", "Action"],
@@ -35,14 +31,14 @@ const GENRES = [
   ["10749", "Romance"],
   ["878", "Science Fiction"],
   ["53", "Thriller"],
-];
+] as const;
 
 const SORT_OPTIONS = [
   ["popularity.desc", "Popularity"],
   ["vote_average.desc", "Top rated"],
   ["release_date.desc", "Newest"],
   ["revenue.desc", "Revenue"],
-];
+] as const;
 
 const PRESET_SORT: Record<string, string> = {
   popular: "popularity.desc",
@@ -50,7 +46,7 @@ const PRESET_SORT: Record<string, string> = {
   top_rated: "vote_average.desc",
 };
 
-const REGION_OPTIONS = ["US", "GB", "IN", "CA", "AU"];
+const REGION_OPTIONS = ["US", "GB", "IN", "CA", "AU"] as const;
 
 function getString(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
@@ -73,6 +69,22 @@ function buildHref(params: Record<string, string | undefined>, page: number) {
   }
   nextParams.set("page", String(page));
   return `/discover?${nextParams.toString()}`;
+}
+
+function getPaginationPages(currentPage: number, totalPages: number) {
+  if (totalPages <= 5) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  if (currentPage <= 2) {
+    return [1, 2, 3, "ellipsis", totalPages];
+  }
+
+  if (currentPage >= totalPages - 1) {
+    return [1, "ellipsis", totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  return [1, "ellipsis", currentPage - 1, currentPage, currentPage + 1, "ellipsis", totalPages];
 }
 
 export const metadata: Metadata = {
@@ -135,6 +147,9 @@ export default async function DiscoverPage({
     runtimeMax !== 300 ||
     Boolean(getString(params.watch_provider)) ||
     Boolean(preset);
+  const hrefParams = Object.fromEntries(
+    Object.entries(params).filter(([, value]) => typeof value === "string" && value !== ""),
+  ) as Record<string, string>;
 
   return (
     <div className="cinema-grain min-h-screen bg-dark-bg">
@@ -155,136 +170,30 @@ export default async function DiscoverPage({
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Filters</CardTitle>
-            <CardDescription>Adjust the discovery controls and refine the result grid.</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-6">
-            <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" method="get">
-              {preset ? <input name="preset" defaultValue={preset} hidden /> : null}
-              <input name="page" defaultValue="1" hidden />
+        <DiscoverFiltersCard
+          preset={preset}
+          sortBy={sortBy}
+          region={region}
+          ratingMin={ratingMin}
+          ratingMax={ratingMax}
+          runtimeMin={runtimeMin}
+          runtimeMax={runtimeMax}
+          hasActiveFilters={hasActiveFilters}
+          genre={getString(params.genre) ?? ""}
+          language={getString(params.language) ?? ""}
+          year={getString(params.year) ?? ""}
+          watchProvider={getString(params.watch_provider) ?? ""}
+          providerOptions={providerOptions.map((provider) => ({
+            value: String(provider.provider_id),
+            label: provider.provider_name,
+            logoPath: provider.logo_path,
+          }))}
+          genreOptions={GENRES}
+          sortOptions={SORT_OPTIONS}
+          regionOptions={REGION_OPTIONS}
+        />
 
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                Genre
-                <SearchablePicker
-                  name="genre"
-                  value={getString(params.genre) ?? ""}
-                  placeholder="All genres"
-                  emptyLabel="No genres found."
-                  clearLabel="All genres"
-                  options={GENRES.map(([value, label]) => ({ value, label }))}
-                />
-              </div>
 
-              <label className="flex flex-col gap-2 text-sm text-muted-foreground">
-                Sort by
-                <Select name="sort_by" defaultValue={sortBy}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Popularity" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SORT_OPTIONS.map(([value, label]) => (
-                      <SelectItem key={value} value={value}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </label>
-
-              <label className="flex flex-col gap-2 text-sm text-muted-foreground">
-                Region
-                <Select name="region" defaultValue={region}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="US" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REGION_OPTIONS.map((value) => (
-                      <SelectItem key={value} value={value}>
-                        {value}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </label>
-
-              <label className="flex flex-col gap-2 text-sm text-muted-foreground">
-                Language
-                <Input
-                  name="language"
-                  defaultValue={getString(params.language) ?? ""}
-                  placeholder="en"
-                />
-              </label>
-
-              <label className="flex flex-col gap-2 text-sm text-muted-foreground">
-                Release year
-                <Input
-                  name="year"
-                  defaultValue={getString(params.year) ?? ""}
-                  placeholder="2025"
-                />
-              </label>
-
-              <DiscoverRangeFilters
-                ratingMin={ratingMin}
-                ratingMax={ratingMax}
-                runtimeMin={runtimeMin}
-                runtimeMax={runtimeMax}
-              />
-
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                Provider
-                <SearchablePicker
-                  name="watch_provider"
-                  value={getString(params.watch_provider) ?? ""}
-                  placeholder="Any provider"
-                  emptyLabel="No providers found."
-                  clearLabel="Any provider"
-                  options={providerOptions.map((provider) => ({
-                    value: String(provider.provider_id),
-                    label: provider.provider_name,
-                    logoPath: provider.logo_path,
-                  }))}
-                />
-              </div>
-
-              <div className="flex items-end gap-3">
-                <Button type="submit" className="w-full">
-                  Apply filters
-                </Button>
-              </div>
-            </form>
-
-            <div className="flex flex-wrap gap-2">
-              {preset ? <Badge variant="secondary">Preset: {preset.replace("_", " ")}</Badge> : null}
-              {hasActiveFilters ? (
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/discover">Clear filters</Link>
-                </Button>
-              ) : null}
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            Page {results.page} of {results.total_pages}
-          </p>
-          <div className="flex gap-3">
-            <Button asChild variant="outline" size="sm" className={results.page <= 1 ? "pointer-events-none opacity-50" : ""}>
-              <Link href={buildHref(Object.fromEntries(Object.entries(params).filter(([, value]) => typeof value === "string" && value !== "")) as Record<string, string>, Math.max(1, results.page - 1))}>
-                Previous
-              </Link>
-            </Button>
-            <Button asChild size="sm" className={results.page >= results.total_pages ? "pointer-events-none opacity-50" : ""}>
-              <Link href={buildHref(Object.fromEntries(Object.entries(params).filter(([, value]) => typeof value === "string" && value !== "")) as Record<string, string>, results.page + 1)}>
-                Next
-              </Link>
-            </Button>
-          </div>
-        </div>
 
         <ScrollArea className="h-auto">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -293,6 +202,51 @@ export default async function DiscoverPage({
             ))}
           </div>
         </ScrollArea>
+        <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-background/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-muted-foreground">
+            Page {results.page} of {results.total_pages.toLocaleString()}
+          </p>
+          <Pagination className="mx-0 w-auto justify-end">
+            <PaginationContent className="gap-1 sm:gap-2">
+              <PaginationItem>
+                <PaginationPrevious
+                  href={buildHref(hrefParams, Math.max(1, results.page - 1))}
+                  aria-disabled={results.page <= 1}
+                  className={results.page <= 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+              {getPaginationPages(results.page, results.total_pages).map((item, index) => {
+                if (item === "ellipsis") {
+                  return (
+                    <PaginationItem key={`ellipsis-${index}`}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
+                }
+
+                return (
+                  <PaginationItem key={item}>
+                    <PaginationLink
+                      href={buildHref(hrefParams, Number(item))}
+                      isActive={item === results.page}
+                      size="icon"
+                      className="rounded-lg"
+                    >
+                      {item}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+              <PaginationItem>
+                <PaginationNext
+                  href={buildHref(hrefParams, Math.min(results.total_pages, results.page + 1))}
+                  aria-disabled={results.page >= results.total_pages}
+                  className={results.page >= results.total_pages ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   );
