@@ -2,6 +2,8 @@ import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { MovieCard } from "@/components/MovieCard";
 import { MovieMetaBar } from "./MovieMetaBar";
 import type { Genre } from "@/types/tmdb";
+import Image from "next/image";
+import { IMAGE_BLUR_DATA_URL, tmdbImageUrl } from "@/lib/image";
 
 type MovieHeroProps = {
   id: number;
@@ -29,11 +31,16 @@ export function MovieHero({
   return (
     <div className="cinema-vignette relative h-[50vh] min-h-[280px] bg-dark-surface">
       {backdrop_path ? (
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50"
-          style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop_path})`,
-          }}
+        <Image
+          src={tmdbImageUrl(backdrop_path, "original")}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          placeholder="blur"
+          blurDataURL={IMAGE_BLUR_DATA_URL}
+          className="object-cover opacity-50"
+          aria-hidden="true"
         />
       ) : null}
       <div

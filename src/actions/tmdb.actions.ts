@@ -1,9 +1,21 @@
 "use server";
 
-import { Movie, MovieSearchResponse, MovieSearchResult, isMovie } from "@/types/tmdb";
-
-const API_KEY = process.env.TMDB_API_KEY;
-const BASE_URL = "https://api.themoviedb.org/3";
+import { cache } from "react";
+import { Movie, MovieSearchResult } from "@/types/tmdb";
+import {
+  fetchTmdbCredits,
+  fetchTmdbDiscoverMovies,
+  fetchTmdbList,
+  fetchTmdbMovie,
+  fetchTmdbWatchProviderList,
+  fetchTmdbPerson,
+  fetchTmdbPersonCombinedCredits,
+  fetchTmdbPersonMovieCredits,
+  fetchTmdbRecommendations,
+  fetchTmdbWatchProviders,
+  searchTmdbMovies,
+  TmdbError,
+} from "@/lib/tmdb-client";
 
 export type MovieListType = "popular" | "now_playing" | "top_rated";
 
@@ -11,90 +23,145 @@ export async function fetchMovieList(
   listType: MovieListType,
   page = 1
 ): Promise<MovieSearchResult[]> {
-  const safePage =
-    typeof page === "number" && Number.isInteger(page) && page >= 1 ? page : 1;
-
-  if (!API_KEY) {
-    console.error("TMDB_API_KEY is not set in environment variables");
-    throw new Error("TMDB API key is not configured");
-  }
-
   try {
-    const response = await fetch(
-      `${BASE_URL}/movie/${listType}?api_key=${API_KEY}&language=en-US&page=${safePage}`,
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`TMDB API error: ${response.status} ${response.statusText}`, errorText);
-      throw new Error(`Failed to fetch movies: ${response.status} ${response.statusText}`);
-    }
-
-    const data: MovieSearchResponse = await response.json();
-    return data.results;
+    return await fetchTmdbList(listType, page);
   } catch (error) {
-    console.error(`Error fetching ${listType} movies:`, error);
+    if (error instanceof TmdbError) {
+      console.error("TMDB list request failed:", error.message, {
+        status: error.status,
+        endpoint: error.endpoint,
+      });
+    } else {
+      console.error(`Error fetching ${listType} movies:`, error);
+    }
     throw error;
   }
 }
 
 export async function searchMovies(query: string): Promise<MovieSearchResult[]> {
-  if (!query) return [];
-
-  if (!API_KEY) {
-    console.error("TMDB_API_KEY is not set in environment variables");
-    return [];
-  }
-
   try {
-    const response = await fetch(
-      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(
-        query
-      )}`,
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`TMDB API error: ${response.status} ${response.statusText}`, errorText);
-      return [];
-    }
-
-    const data: MovieSearchResponse = await response.json();
-    return data.results;
+    return await searchTmdbMovies(query);
   } catch (error) {
-    console.error("Error searching movies:", error);
+    if (error instanceof TmdbError) {
+      console.error("TMDB search request failed:", error.message, {
+        status: error.status,
+        endpoint: error.endpoint,
+      });
+    } else {
+      console.error("Error searching movies:", error);
+    }
     return [];
   }
 }
 
-export async function fetchMovieDetails(movieId: number): Promise<Movie> {
-  if (!API_KEY) {
-    console.error("TMDB_API_KEY is not set in environment variables");
-    throw new Error("TMDB API key is not configured");
-  }
-
+const cachedFetchMovieDetails = cache(async (movieId: number): Promise<Movie> => {
   try {
-    const response = await fetch(
-      `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`,
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`TMDB API error: ${response.status} ${response.statusText}`, errorText);
-      throw new Error(`Failed to fetch movie details: ${response.status} ${response.statusText}`);
-    }
-
-    const data: unknown = await response.json();
-    if (!isMovie(data)) {
-      console.error("TMDB movie details response shape invalid", data);
-      throw new Error("Invalid movie details response from API");
-    }
-    return data;
+    return await fetchTmdbMovie(movieId);
   } catch (error) {
-    console.error("Error fetching movie details:", error);
+    if (error instanceof TmdbError) {
+      console.error("TMDB details request failed:", error.message, {
+        status: error.status,
+        endpoint: error.endpoint,
+      });
+    } else {
+      console.error("Error fetching movie details:", error);
+    }
     throw error;
+  }
+});
+
+export async function fetchMovieDetails(movieId: number): Promise<Movie> {
+  return cachedFetchMovieDetails(movieId);
+}
+
+export async function fetchDiscoverMovies(
+  params: Record<string, string | number | undefined>
+) {
+  try {
+    return await fetchTmdbDiscoverMovies(params);
+  } catch (error) {
+    if (error instanceof TmdbError) {
+      console.error("TMDB discover request failed:", error.message, {
+        status: error.status,
+        endpoint: error.endpoint,
+      });
+    } else {
+      console.error("Error fetching discover movies:", error);
+    }
+    throw error;
+  }
+}
+
+export async function fetchMovieRecommendations(movieId: number) {
+  try {
+    return await fetchTmdbRecommendations(movieId);
+  } catch (error) {
+    console.error("Error fetching recommendations:", error);
+    return { page: 1, results: [], total_pages: 0, total_results: 0 };
+  }
+}
+
+export async function fetchMovieWatchProviders(movieId: number) {
+  try {
+    return await fetchTmdbWatchProviders(movieId);
+  } catch (error) {
+    console.error("Error fetching watch providers:", error);
+    return { id: movieId, results: {} };
+  }
+}
+
+export async function fetchWatchProviderList(region?: string) {
+  try {
+    return await fetchTmdbWatchProviderList(region);
+  } catch (error) {
+    console.error("Error fetching watch provider list:", error);
+    return { results: [] };
+  }
+}
+
+export async function fetchMovieCredits(movieId: number) {
+  try {
+    return await fetchTmdbCredits(movieId);
+  } catch (error) {
+    console.error("Error fetching movie credits:", error);
+    return { id: movieId, cast: [], crew: [] };
+  }
+}
+
+const cachedFetchPersonDetails = cache(async (personId: number) => {
+  try {
+    return await fetchTmdbPerson(personId);
+  } catch (error) {
+    if (error instanceof TmdbError) {
+      console.error("TMDB person request failed:", error.message, {
+        status: error.status,
+        endpoint: error.endpoint,
+      });
+    } else {
+      console.error("Error fetching person details:", error);
+    }
+    throw error;
+  }
+});
+
+export async function fetchPersonDetails(personId: number) {
+  return cachedFetchPersonDetails(personId);
+}
+
+export async function fetchPersonMovieCredits(personId: number) {
+  try {
+    return await fetchTmdbPersonMovieCredits(personId);
+  } catch (error) {
+    console.error("Error fetching person movie credits:", error);
+    return { cast: [], crew: [] };
+  }
+}
+
+export async function fetchPersonCombinedCredits(personId: number) {
+  try {
+    return await fetchTmdbPersonCombinedCredits(personId);
+  } catch (error) {
+    console.error("Error fetching person combined credits:", error);
+    return { cast: [], crew: [] };
   }
 }

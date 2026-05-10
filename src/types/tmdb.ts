@@ -17,6 +17,13 @@ export interface MovieSearchResponse {
   total_results: number;
 }
 
+export interface PaginatedResponse<T> {
+  page: number;
+  results: T[];
+  total_pages: number;
+  total_results: number;
+}
+
 interface Collection {
   id: number;
   name: string;
@@ -45,6 +52,95 @@ export interface SpokenLanguage {
   english_name?: string;
   iso_639_1: string;
   name: string;
+}
+
+export interface Provider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string | null;
+  display_priority?: number;
+}
+
+export interface WatchProviderCountryInfo {
+  link: string;
+  flatrate?: Provider[];
+  buy?: Provider[];
+  rent?: Provider[];
+  ads?: Provider[];
+  free?: Provider[];
+}
+
+export interface MovieWatchProviders {
+  id: number;
+  results: Record<string, WatchProviderCountryInfo>;
+}
+
+export interface WatchProviderListResponse {
+  results: Provider[];
+}
+
+export interface MovieCreditCast {
+  id: number;
+  cast_id?: number;
+  character: string;
+  credit_id: string;
+  gender?: number | null;
+  name: string;
+  order: number;
+  original_name?: string;
+  profile_path: string | null;
+}
+
+export interface MovieCreditCrew {
+  id: number;
+  credit_id: string;
+  department: string;
+  job: string;
+  gender?: number | null;
+  name: string;
+  original_name?: string;
+  profile_path: string | null;
+}
+
+export interface MovieCredits {
+  id: number;
+  cast: MovieCreditCast[];
+  crew: MovieCreditCrew[];
+}
+
+export interface PersonMovieCreditRole {
+  credit_id: string;
+  character?: string;
+  job?: string;
+  department?: string;
+}
+
+export interface PersonMovieCreditItem extends MovieSearchResult {
+  adult?: boolean;
+  original_title?: string;
+  character?: string;
+  job?: string;
+  credit_id?: string;
+  order?: number;
+}
+
+export interface PersonCreditsResponse {
+  cast: PersonMovieCreditItem[];
+  crew: PersonMovieCreditItem[];
+}
+
+export interface Person {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  homepage: string | null;
+  imdb_id: string | null;
+  known_for_department: string;
+  place_of_birth: string | null;
+  popularity: number;
+  profile_path: string | null;
 }
 
 /** TMDB movie details API response shape (matches /movie/{id} response) */
@@ -144,5 +240,17 @@ export function isMovie(value: unknown): value is Movie {
     o.spoken_languages.every(isSpokenLanguage) &&
     typeof o.release_date === "string" &&
     typeof o.vote_average === "number"
+  );
+}
+
+export function isPerson(value: unknown): value is Person {
+  if (value === null || typeof value !== "object") return false;
+  const o = value as Record<string, unknown>;
+  return (
+    typeof o.id === "number" &&
+    typeof o.name === "string" &&
+    typeof o.biography === "string" &&
+    (typeof o.profile_path === "string" || o.profile_path === null) &&
+    (typeof o.imdb_id === "string" || o.imdb_id === null)
   );
 }

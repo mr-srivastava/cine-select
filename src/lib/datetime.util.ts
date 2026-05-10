@@ -1,16 +1,14 @@
 export function formatReleaseDate(dateString: string): string {
   const date = new Date(dateString);
-  
-  // Validate the date
-  if (isNaN(date.getTime())) {
+
+  if (Number.isNaN(date.getTime())) {
     return "Invalid date";
   }
-  
+
   const day = date.getDate();
   const month = date.toLocaleDateString("en-US", { month: "short" });
   const year = date.getFullYear();
-  
-  // Add ordinal suffix to day
+
   const getOrdinalSuffix = (n: number): string => {
     const j = n % 10;
     const k = n % 100;
@@ -19,14 +17,14 @@ export function formatReleaseDate(dateString: string): string {
     if (j === 3 && k !== 13) return "rd";
     return "th";
   };
-  
+
   return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
 }
 
 export function formatRuntime(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
-  
+
   if (hours === 0) {
     return `${mins}m`;
   }

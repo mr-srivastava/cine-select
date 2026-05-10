@@ -8,7 +8,7 @@ import {
   CommandList
 } from "@/components/ui/command";
 import { searchMovies } from "@/actions/tmdb.actions";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { MovieSearchResult } from "@/types/tmdb";
 import { Loader2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
@@ -18,18 +18,25 @@ export default function MovieSearch() {
   const [movies, setMovies] = useState<MovieSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const requestIdRef = useRef(0);
 
   const debouncedSearch = useDebouncedCallback(async (value: string) => {
+    const requestId = ++requestIdRef.current;
     if (value) {
       setIsLoading(true);
       try {
         const results = await searchMovies(value);
-        setMovies(results);
+        if (requestId === requestIdRef.current) {
+          setMovies(results);
+        }
       } finally {
-        setIsLoading(false);
+        if (requestId === requestIdRef.current) {
+          setIsLoading(false);
+        }
       }
     } else {
       setMovies([]);
+      setIsLoading(false);
     }
   }, 300);
 

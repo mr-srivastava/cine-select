@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { formatReleaseDate } from "@/lib/datetime.util";
+import { IMAGE_BLUR_DATA_URL, tmdbImageUrl } from "@/lib/image";
 
 interface MovieCardRootProps {
   movieId: number;
@@ -43,31 +44,34 @@ function MovieCardPoster({
   className = "",
   fallbackClassName = "",
 }: MovieCardPosterProps) {
-  const containerClassName = width && height 
-    ? "" 
+  const containerClassName = width && height
+    ? ""
     : "relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-muted ring-1 ring-white/10";
+  const fallbackStyle = width && height ? { width, height } : undefined;
 
   if (poster_path) {
     if (width && height) {
-      // Fixed size mode (for page.tsx)
       return (
         <Image
-          src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+          src={tmdbImageUrl(poster_path, "w500")}
           alt={title}
           width={width}
           height={height}
+          placeholder="blur"
+          blurDataURL={IMAGE_BLUR_DATA_URL}
           className={className}
         />
       );
     } else {
-      // Fill mode (for card usage)
       return (
         <div className={containerClassName}>
           <Image
-            src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+            src={tmdbImageUrl(poster_path, "w500")}
             alt={title}
             fill
             sizes={sizes || "(max-width: 640px) 140px, 160px"}
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR_DATA_URL}
             className={cn("object-cover transition-opacity duration-200 group-hover:opacity-90", className)}
           />
         </div>
@@ -75,14 +79,20 @@ function MovieCardPoster({
     }
   }
 
-  // Fallback when no poster_path
-  const fallbackStyle = width && height ? { width, height } : undefined;
   return (
-    <div 
-      className={cn(containerClassName, "flex h-full w-full items-center justify-center text-4xl text-muted-foreground", fallbackClassName)}
+    <div
+      className={cn(
+        containerClassName,
+        "flex h-full w-full items-center justify-center bg-gradient-to-br from-muted via-muted to-background text-muted-foreground",
+        fallbackClassName
+      )}
       style={fallbackStyle}
+      aria-hidden="true"
     >
-      🎬
+      <span className="flex flex-col items-center gap-1">
+        <span className="text-3xl leading-none">CineSelect</span>
+        <span className="text-[10px] uppercase tracking-[0.35em]">No poster</span>
+      </span>
     </div>
   );
 }

@@ -1,6 +1,12 @@
 import MovieSearch from "@/components/MovieSearch";
 import MovieSection from "@/components/MovieSection";
 import { fetchMovieList } from "@/actions/tmdb.actions";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Discover Movies",
+  description: "Search and explore popular, now playing, and top rated movies.",
+};
 
 export default async function Home() {
   const results = await Promise.allSettled([
@@ -29,9 +35,9 @@ export default async function Home() {
         </div>
       </div>
       <div className="relative z-10 mx-auto max-w-7xl space-y-10 px-4 pb-16">
-        <MovieSection title="Popular" movies={popular} />
-        <MovieSection title="Now Playing" movies={nowPlaying} />
-        <MovieSection title="Top Rated" movies={topRated} />
+        <MovieSection title="Popular" movies={popular} href="/discover?preset=popular" />
+        <MovieSection title="Now Playing" movies={nowPlaying} href="/discover?preset=now_playing" />
+        <MovieSection title="Top Rated" movies={topRated} href="/discover?preset=top_rated" />
       </div>
     </div>
   );

@@ -25,20 +25,16 @@ export default function PageBreadcrumb({ breadcrumbs }: PageBreadcrumbProps) {
         {breadcrumbs.map((breadcrumb, index) => {
           return (
             <Fragment key={breadcrumb.link}>
-              <BreadcrumbItem key={breadcrumb.link}>
+              <BreadcrumbItem>
                 {breadcrumb.isActive ? (
                   <BreadcrumbPage>{breadcrumb.label}</BreadcrumbPage>
                 ) : (
-                  <>
-                    <BreadcrumbLink href={breadcrumb.link}>
-                      {breadcrumb.label}
-                    </BreadcrumbLink>
-                  </>
+                  <BreadcrumbLink href={breadcrumb.link}>
+                    {breadcrumb.label}
+                  </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
-              {index < breadcrumbs.length - 1 && (
-                <BreadcrumbSeparator />
-              )}
+              {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
             </Fragment>
           );
         })}
